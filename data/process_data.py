@@ -27,4 +27,5 @@ portfolio.id = column_mapper(portfolio.id)
 profile.id = column_mapper(profile.id)
 transcript.person = column_mapper(transcript.person)
 
-
+# convert json column to multiple columns in transcript df
+transcript = pd.concat([transcript, transcript['value'].apply(pd.Series)], axis=1)
