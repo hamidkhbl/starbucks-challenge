@@ -1,1 +1,4 @@
 *.json
+\starbucks
+\.ipynb_checkpoints
+*.csv
