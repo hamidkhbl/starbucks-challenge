@@ -32,7 +32,9 @@ profile.rename(columns = {'id':'person_id'}, inplace = True)
 transcript.rename(columns = {'offer id':'portfolio_id','person':'person_id'}, inplace = True)
 
 df = profile.merge(transcript, on = 'person_id', how='right').merge(portfolio, how='left', left_on='offer_id', right_on = 'portfolio_id')
-df = df.sort_values(['person_id','time',''])
+
+# sort df
+df = df.sort_values(['person_id','time'])
 
 # map encoded columns to ids for all dfs
 df.person_id = column_mapper(df.person_id)
