@@ -43,6 +43,8 @@ df.rename(columns={'event_offer completed':'event_offer_completed',
                    'event_offer received':'event_offer_received',
                    'event_offer viewed':'event_offer_viewed'}, inplace = True)
 
+# rename reward columns
+df.rename(columns={'reward_x':'offer_reward', 'reward_y':'portfolio_reward'}, inplace = True)
 
 df.to_csv('starbucks_offers.csv')
 
