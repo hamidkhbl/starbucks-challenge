@@ -4,13 +4,20 @@ import numpy as np
 import math
 import json
 
-# read in the json files
-portfolio = pd.read_json('data/portfolio.json', orient='records', lines=True)
-profile = pd.read_json('data/profile.json', orient='records', lines=True)
-transcript = pd.read_json('data/transcript.json', orient='records', lines=True)
+def load_data():
+    '''
+
+    '''
+    # read in the json files
+    portfolio = pd.read_json('data/portfolio.json', orient='records', lines=True)
+    profile = pd.read_json('data/profile.json', orient='records', lines=True)
+    transcript = pd.read_json('data/transcript.json', orient='records', lines=True)
+    return portfolio, profile, transcript
 
 # map encoded columns to ids
 def column_mapper(column):
+    '''
+    '''
     coded_dict = dict()
     cter = 1
     encoded = []
@@ -23,35 +30,57 @@ def column_mapper(column):
         encoded.append(coded_dict[val])
     return encoded
 
-# convert value (json column) to multiple columns in transcript df
-transcript = pd.concat([transcript, transcript['value'].apply(pd.Series)], axis=1)
-del transcript['value']
+def clean(portfolio, profile, transcript):
+    # convert value (json column) to multiple columns in transcript df
+    transcript = pd.concat([transcript, transcript['value'].apply(pd.Series)], axis=1)
+    del transcript['value']
 
-# rename columns 
-portfolio.rename(columns = {'id':'portfolio_id'}, inplace = True)
-profile.rename(columns = {'id':'person_id'}, inplace = True)
-transcript.rename(columns = {'offer id':'portfolio_id','person':'person_id'}, inplace = True)
+    # rename columns 
+    portfolio.rename(columns = {'id':'portfolio_id'}, inplace = True)
+    profile.rename(columns = {'id':'person_id'}, inplace = True)
+    transcript.rename(columns = {'offer id':'portfolio_id','person':'person_id'}, inplace = True)
 
-# fill null values in portfolio_id with offer_id
-transcript['portfolio_id'].fillna(transcript['offer_id'], inplace = True)
+    # fill null values in portfolio_id with offer_id
+    transcript['portfolio_id'].fillna(transcript['offer_id'], inplace = True)
 
-# merge 
-df = profile.merge(transcript, on = 'person_id', how='right').merge(portfolio, how='left', left_on='offer_id', right_on = 'portfolio_id')
+    # merge 
+    df = profile.merge(transcript, on = 'person_id', how='right').merge(portfolio, how='left', left_on='offer_id', right_on = 'portfolio_id')
 
-# sort df
-df = df.sort_values(['person_id','time'])
+    # sort df
+    df = df.sort_values(['person_id','time'])
 
-# map encoded columns to ids for all dfs
-df.person_id = column_mapper(df.person_id)
+    # map encoded columns to ids for all dfs
+    df.person_id = column_mapper(df.person_id)
 
-# Add dummy variables for event column
-df = pd.get_dummies(df, columns=['event'])
-df.rename(columns={'event_offer completed':'event_offer_completed',
-                   'event_offer received':'event_offer_received',
-                   'event_offer viewed':'event_offer_viewed'}, inplace = True)
+    # Add dummy variables for event column
+    df = pd.get_dummies(df, columns=['event'])
+    df.rename(columns={'event_offer completed':'event_offer_completed',
+                    'event_offer received':'event_offer_received',
+                    'event_offer viewed':'event_offer_viewed'}, inplace = True)
 
-# rename reward columns
-df.rename(columns={'reward_x':'offer_reward', 'reward_y':'portfolio_reward'}, inplace = True)
+    # rename reward columns
+    df.rename(columns={'reward_x':'offer_reward', 'reward_y':'portfolio_reward'}, inplace = True)
+    df.rename(columns={'portfolio_id_x':'portfolio_id', 'reward_y':'portfolio_reward'}, inplace = True)
+    # create person_offer dataframe
+    person_offer = df.groupby(['person_id','portfolio_id']).sum().reset_index()
+    person_offer = person_offer[['person_id', 'portfolio_id', 'event_offer_completed', 'event_offer_received', 'event_offer_viewed', 'event_transaction']]
 
-df.to_csv('starbucks_offers.csv')
+    return df, person_offer
 
+def save_data(df, person_offer):
+    person_offer.to_csv('data\person_offer.csv')
+    df.to_csv('data\offer_details.csv')
+
+def main():
+
+    portfolio, profile, transcript = load_data()
+    df, person_offer = clean(portfolio, profile, transcript)
+    save_data(df, person_offer)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+# %%
