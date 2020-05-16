@@ -1,3 +1,4 @@
+#%%
 import pandas as pd
 import numpy as np
 import math
@@ -31,6 +32,10 @@ portfolio.rename(columns = {'id':'portfolio_id'}, inplace = True)
 profile.rename(columns = {'id':'person_id'}, inplace = True)
 transcript.rename(columns = {'offer id':'portfolio_id','person':'person_id'}, inplace = True)
 
+# fill null values in portfolio_id with offer_id
+transcript['portfolio_id'].fillna(transcript['offer_id'], inplace = True)
+
+# merge 
 df = profile.merge(transcript, on = 'person_id', how='right').merge(portfolio, how='left', left_on='offer_id', right_on = 'portfolio_id')
 
 # sort df
