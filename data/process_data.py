@@ -29,9 +29,20 @@ del transcript['value']
 # rename columns 
 portfolio.rename(columns = {'id':'portfolio_id'}, inplace = True)
 profile.rename(columns = {'id':'person_id'}, inplace = True)
-transcript.rename(columns = {'offer_id':'offer_id_2','offer id':'offer_id','person':'person_id'}, inplace = True)
+transcript.rename(columns = {'offer id':'portfolio_id','person':'person_id'}, inplace = True)
 
 df = profile.merge(transcript, on = 'person_id', how='right').merge(portfolio, how='left', left_on='offer_id', right_on = 'portfolio_id')
+df = df.sort_values(['person_id','time',''])
 
 # map encoded columns to ids for all dfs
-# transcript.person = column_mapper(transcript.person)
+df.person_id = column_mapper(df.person_id)
+
+# Add dummy variables for event column
+df = pd.get_dummies(df, columns=['event'])
+df.rename(columns={'event_offer completed':'event_offer_completed',
+                   'event_offer received':'event_offer_received',
+                   'event_offer viewed':'event_offer_viewed'}, inplace = True)
+
+
+df.to_csv('starbucks_offers.csv')
+
