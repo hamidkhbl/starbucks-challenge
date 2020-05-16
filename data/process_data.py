@@ -22,11 +22,6 @@ def column_mapper(column):
         encoded.append(coded_dict[val])
     return encoded
 
-# map encoded columns to ids for all dfs
-# portfolio.id = column_mapper(portfolio.id)
-# profile.id = column_mapper(profile.id)
-# transcript.person = column_mapper(transcript.person)
-
 # convert value (json column) to multiple columns in transcript df
 transcript = pd.concat([transcript, transcript['value'].apply(pd.Series)], axis=1)
 del transcript['value']
@@ -35,3 +30,8 @@ del transcript['value']
 portfolio.rename(columns = {'id':'portfolio_id'}, inplace = True)
 profile.rename(columns = {'id':'person_id'}, inplace = True)
 transcript.rename(columns = {'offer_id':'offer_id_2','offer id':'offer_id','person':'person_id'}, inplace = True)
+
+df = profile.merge(transcript, on = 'person_id', how='right').merge(portfolio, how='left', left_on='offer_id', right_on = 'portfolio_id')
+
+# map encoded columns to ids for all dfs
+# transcript.person = column_mapper(transcript.person)
