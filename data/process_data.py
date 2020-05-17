@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import math
 import json
+from sqlalchemy import create_engine
 
 def load_data():
     '''
@@ -74,11 +75,14 @@ def clean(portfolio, profile, transcript):
 
     return df, person_offer
 
-def save_data(df, person_offer):
+def save_data():
     '''
+
     '''
-    person_offer.to_csv('data\person_offer.csv')
-    df.to_csv('data\offer_details.csv')
+    engine = create_engine('sqlite:///starbucks')
+    person_offer.to_sql('person_offer', engine, index=False)
+    df.to_sql('offer_details', engine, index=False)
+
 
 def main():
 
