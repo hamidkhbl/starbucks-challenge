@@ -5,13 +5,14 @@ import numpy as np
 
 from flask import Flask
 from flask import render_template, request, jsonify
+from flask import abort, redirect, url_for
 from plotly.graph_objs import Scatter
 from plotly.graph_objs import Figure
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, histogram, histogram2d
 
 
 
-app = Flask(__name__)
+app = Flask(__name__ , static_folder='app/static')
 
 # load data
 offer_details = pd.read_csv('..//data//offer_details.csv')
@@ -23,6 +24,7 @@ person_offer = pd.read_csv('..//data//person_offer.csv')
 @app.route('/')
 @app.route('/index')
 def index():
+    
     return render_template('master.html')
 
 @app.route('/plots')
@@ -36,48 +38,54 @@ def plots():
     offers_count.append(person_offer.event_offer_viewed.sum())
     offers_count.append(person_offer.event_offer_completed.sum())
 
+    #data for age histogram
+    ages = offer_details[offer_details.age < 116].drop_duplicates(['person_id']).age
+
+    # data for income histogram
+    income = offer_details[offer_details.income.notna()].drop_duplicates(['person_id'])['income'].values
+
+    # data for offer type (bogo, discount) offer status
+
     # create visuals
     graphs = [
-        #          {
-        #     'data': [
-        #         Scatter(
-        #             x= cat_names,
-        #             y= cat_counts
-        #         )
-        #     ],
+                 {
+            'data': [
+                dict(
+                    x=ages,
+                    type='histogram'
+                    
+                )
+            ],
 
-        #     'layout': {
-        #         'title': 'Distribution of Message Categories',
-        #         'margin': {'b': 150},
-        #         'yaxis': {
-        #             'title': "Count"
-        #         },
-        #         'xaxis': {
-        #             'title': "Category",
-        #              'tickangle' : 45
-        #         }
-        #     }
-        # },
-        # {
-        #     'data': [
-        #         Scatter(
-        #             x= cat_names_dist,
-        #             y= cat_counts_dist
-        #         )
-        #     ],
+            'layout': {
+                'title': 'Age distribution of users',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Age"
+                }
+            }
+        },
+            {
+            'data': [
+                dict(
+                    x=income,
+                    type='histogram'
+                    
+                )
+            ],
 
-        #     'layout': {
-        #         'title': 'Distribution of Count of Categories',
-        #         'margin': {'b': 150},
-        #         'yaxis': {
-        #             'title': "Message count"
-        #         },
-        #         'xaxis': {
-        #             'title': "Category count",
-        #              'tickangle' : 0
-        #         }
-        #     }
-        # },
+            'layout': {
+                'title': 'Income distribution of users',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Income"
+                }
+            }
+        },
         {
             'data': [
                 Bar(
