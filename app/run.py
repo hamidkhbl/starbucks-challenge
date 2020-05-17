@@ -87,12 +87,12 @@ def plots():
             ],
 
             'layout': {
-                'title': 'Distribution of Message Genres',
+                'title': 'Offer Status Bar chart',
                 'yaxis': {
                     'title': "Count"
                 },
                 'xaxis': {
-                    'title': "Genres"
+                    'title': "Offer Status"
                 }
             }
         }
