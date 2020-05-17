@@ -42,6 +42,9 @@ def clean(portfolio, profile, transcript):
     profile.rename(columns = {'id':'person_id'}, inplace = True)
     transcript.rename(columns = {'offer id':'portfolio_id','person':'person_id'}, inplace = True)
 
+    # fix became_member_on date format
+    profile['became_member_on'] = pd.to_datetime(profile['became_member_on'].astype(str), format='%Y%m%d')  
+
     # fill null values in portfolio_id with offer_id
     transcript['portfolio_id'].fillna(transcript['offer_id'], inplace = True)
 
