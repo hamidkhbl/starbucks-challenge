@@ -31,6 +31,8 @@ def column_mapper(column):
     return encoded
 
 def clean(portfolio, profile, transcript):
+    '''
+    '''
     # convert value (json column) to multiple columns in transcript df
     transcript = pd.concat([transcript, transcript['value'].apply(pd.Series)], axis=1)
     del transcript['value']
@@ -51,6 +53,7 @@ def clean(portfolio, profile, transcript):
 
     # map encoded columns to ids for all dfs
     df.person_id = column_mapper(df.person_id)
+    transcript.portfolio_id = column_mapper(transcript.portfolio_id)
 
     # Add dummy variables for event column
     df = pd.get_dummies(df, columns=['event'])
@@ -61,13 +64,16 @@ def clean(portfolio, profile, transcript):
     # rename reward columns
     df.rename(columns={'reward_x':'offer_reward', 'reward_y':'portfolio_reward'}, inplace = True)
     df.rename(columns={'portfolio_id_x':'portfolio_id', 'reward_y':'portfolio_reward'}, inplace = True)
+    
     # create person_offer dataframe
     person_offer = df.groupby(['person_id','portfolio_id']).sum().reset_index()
-    person_offer = person_offer[['person_id', 'portfolio_id', 'event_offer_completed', 'event_offer_received', 'event_offer_viewed', 'event_transaction']]
+    person_offer = person_offer[['person_id', 'portfolio_id', 'event_offer_completed', 'event_offer_received', 'event_offer_viewed']]
 
     return df, person_offer
 
 def save_data(df, person_offer):
+    '''
+    '''
     person_offer.to_csv('data\person_offer.csv')
     df.to_csv('data\offer_details.csv')
 
