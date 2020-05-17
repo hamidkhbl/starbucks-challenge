@@ -5,7 +5,7 @@
 
 1. [Installation](#installation)
 2. [Project Definition](#def)
-3. [File Descriptions](#files)
+3. [File Description](#file-description)
 4. [Analysis](#Analysis)
 5. [Methodology](#Methodology)
 6. [Results](#results)
@@ -20,7 +20,7 @@
 * ### Problem Statement
 * ### Metrics
 
-## File Descriptions <a name="files"></a>
+## File Descriptions <a name="file-description"></a>
 
 ## Analysis <a name="Analysis"></a>
 * ### Data Exploration
