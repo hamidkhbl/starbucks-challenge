@@ -1,14 +1,9 @@
 import json
 import plotly
-import pandas as pd
-import numpy as np
 
 from flask import Flask
 from flask import render_template, request, jsonify
 from flask import abort, redirect, url_for
-from plotly.graph_objs import Scatter
-from plotly.graph_objs import Figure
-from plotly.graph_objs import Bar, histogram, histogram2d
 import sys
 sys.path.append("code")
 from plot import plot
