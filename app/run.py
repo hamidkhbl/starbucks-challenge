@@ -22,12 +22,8 @@ def index():
 @app.route('/plots')
 def plots():
     
-    graphs = plot()
-    
-    # encode plotly graphs in JSON
-    ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
-    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
-    
+    ids, graphJSON = plot()
+
     # render web page with plotly graphs
     return render_template('plots.html', ids=ids, graphJSON=graphJSON)
 
