@@ -35,7 +35,8 @@ def clean(portfolio, profile, transcript):
     '''
     '''
     # convert value (json column) to multiple columns in transcript df
-    transcript = pd.concat([transcript, transcript['value'].apply(pd.Series)], axis=1)
+    transcript.value = transcript.value.astype(str).replace({'\'': '"'}, regex=True)
+    transcript = pd.concat([transcript, pd.json_normalize(transcript.value.apply(json.loads))],axis = 1)
     del transcript['value']
 
     # rename columns
@@ -79,7 +80,7 @@ def save_data(df, person_offer):
     '''
 
     '''
-    engine = create_engine('sqlite:///data/starbucks')
+    engine = create_engine('sqlite:///data/starbucks.sqlite')
     person_offer.to_sql('person_offer', engine, index=False)
     df.to_sql('offer_details', engine, index=False)
 
