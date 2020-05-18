@@ -36,7 +36,6 @@ def plot():
                             }
                         }
                      }
-    graphs.append(offer_status_graph)
 
     #data for age histogram
     ages = offer_details[offer_details.age < 116].drop_duplicates(['person_id']).age
@@ -51,7 +50,6 @@ def plot():
                     }
                 }
                 }
-    graphs.append(age_graph)
 
     # data for income histogram
     income = offer_details[offer_details.income.notna()].drop_duplicates(['person_id'])['income'].values
@@ -66,7 +64,6 @@ def plot():
                         }
                     }
                 }
-    graphs.append(income_graph)
 
     # Spending histogram
     spending = offer_details[offer_details.amount>0].groupby('person_id').sum()['amount'].values
@@ -80,7 +77,6 @@ def plot():
                             'title': "Spending"
                         }
                     }}
-    graphs.append(spending_graph)
 
     # view status of affert that are completed
     completed = person_offer[person_offer.event_offer_completed == 1].groupby('event_offer_viewed').count()['person_id']
@@ -94,9 +90,10 @@ def plot():
                             'title': "View count"
                         }
                     }}
-    graphs.append(completed_graph)
 
-    ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
+    graphs = [offer_status_graph, age_graph, income_graph, spending_graph, completed_graph]
+    ids =    ['offer_status_graph', 'age_graph', 'income_graph', 'spending_graph', 'completed_graph']
+
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
 
     return ids, graphJSON
