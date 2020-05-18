@@ -50,15 +50,17 @@ def clean(portfolio, profile, transcript):
     # fill null values in portfolio_id with offer_id
     transcript['portfolio_id'].fillna(transcript['offer_id'], inplace = True)
 
+    #map portfolio_id
+    transcript.portfolio_id = column_mapper(transcript.portfolio_id)
+
     # merge
     df = profile.merge(transcript, on = 'person_id', how='right').merge(portfolio, how='left', left_on='offer_id', right_on = 'portfolio_id')
 
     # sort df
     df = df.sort_values(['person_id','time'])
 
-    # map encoded columns to ids for all dfs
+    # map encoded columns to ids
     df.person_id = column_mapper(df.person_id)
-    transcript.portfolio_id = column_mapper(transcript.portfolio_id)
 
     # Add dummy variables for event column
     df = pd.get_dummies(df, columns=['event'])
