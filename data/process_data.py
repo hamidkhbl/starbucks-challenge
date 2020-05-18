@@ -76,6 +76,7 @@ def clean(portfolio, profile, transcript):
     person_offer = df.groupby(['person_id','portfolio_id']).sum().reset_index()
     person_offer = person_offer[['person_id', 'portfolio_id', 'event_offer_completed', 'event_offer_received', 'event_offer_viewed']]
 
+    df['channels'] = df['channels'].astype('str')
     return df, person_offer
 
 def save_data(df, person_offer):
