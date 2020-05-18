@@ -13,6 +13,7 @@ from plotly.graph_objs import Bar, histogram, histogram2d
 def plot():
     graphs = []
     # load data
+
     offer_details = pd.read_csv('..//data//offer_details.csv')
     person_offer = pd.read_csv('..//data//person_offer.csv')
 
@@ -81,7 +82,19 @@ def plot():
                     }}
     graphs.append(spending_graph)
 
-    # data for offer type (bogo, discount) offer status
+    # view status of affert that are completed
+    completed = person_offer[person_offer.event_offer_completed == 1].groupby('event_offer_viewed').count()['person_id']
+    completed_graph = {'data':[dict(x=completed.index, y = completed.values, type = 'bar')],
+                    'layout':  {
+                        'title': 'How many times a completed offer was viewed',
+                        'yaxis': {
+                            'title': "Count"
+                        },
+                        'xaxis': {
+                            'title': "View count"
+                        }
+                    }}
+    graphs.append(completed_graph)
 
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
