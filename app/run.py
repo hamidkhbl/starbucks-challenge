@@ -6,22 +6,24 @@ from flask import render_template, request, jsonify
 from flask import abort, redirect, url_for
 import sys
 sys.path.append("code")
+sys.path.append("static")
 from plot import plot
 
 
 
-app = Flask(__name__ , static_folder='app/static')
+app = Flask(__name__ )
+app.config.from_object('settings')
 
 # index webpage displays cool visuals and receives user input text for model
 @app.route('/')
 @app.route('/index')
 def index():
-    
+
     return render_template('master.html')
 
 @app.route('/plots')
 def plots():
-    
+
     ids, graphJSON = plot()
 
     # render web page with plotly graphs
@@ -30,13 +32,13 @@ def plots():
 # @app.route('/go')
 # def go():
     # save user input in query
-    # query = request.args.get('query', '') 
+    # query = request.args.get('query', '')
 
     # use model to predict classification for query
     # classification_labels = model.predict([query])[0]
     # classification_results = dict(zip(df.columns[3:], classification_labels))
 
-    # This will render the go.html Please see that file. 
+    # This will render the go.html Please see that file.
     # return render_template(
     #     'go.html',
     #     query=query,
