@@ -9,14 +9,15 @@ from flask import abort, redirect, url_for
 from plotly.graph_objs import Scatter
 from plotly.graph_objs import Figure
 from plotly.graph_objs import Bar, histogram, histogram2d
+from sqlalchemy import create_engine
 
 def plot():
     graphs = []
     # load data
 
-    offer_details = pd.read_csv('..//data//offer_details.csv')
-    person_offer = pd.read_csv('..//data//person_offer.csv')
-
+    engine = create_engine('sqlite:///../data/starbucks.sqlite')
+    offer_details = pd.read_sql_table('offer_details', engine)
+    person_offer = pd.read_sql_table('person_offer', engine)
 
     # data for bar chart
     offers_count = []
