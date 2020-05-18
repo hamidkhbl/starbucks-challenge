@@ -51,6 +51,7 @@ def plot():
                 }
                 }
     graphs.append(age_graph)
+
     # data for income histogram
     income = offer_details[offer_details.income.notna()].drop_duplicates(['person_id'])['income'].values
     income_graph = {'data': [dict(x=income,type='histogram')],
@@ -66,6 +67,19 @@ def plot():
                 }
     graphs.append(income_graph)
 
+    # Spending histogram
+    spending = offer_details[offer_details.amount>0].groupby('person_id').sum()['amount'].values
+    spending_graph = {'data':[dict(x=spending, type='histogram')],
+                    'layout':  {
+                        'title': 'Spending distribution',
+                        'yaxis': {
+                            'title': "Count"
+                        },
+                        'xaxis': {
+                            'title': "Spending"
+                        }
+                    }}
+    graphs.append(spending_graph)
 
     # data for offer type (bogo, discount) offer status
 
