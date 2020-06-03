@@ -51,7 +51,7 @@ def clean(portfolio, profile, transcript):
     transcript['portfolio_id'].fillna(transcript['offer_id'], inplace = True)
 
     #map portfolio_id
-    transcript.portfolio_id = column_mapper(transcript.portfolio_id)
+    #transcript.portfolio_id = column_mapper(transcript.portfolio_id)
 
     # merge
     df = profile.merge(transcript, on = 'person_id', how='right').merge(portfolio, how='left', left_on='offer_id', right_on = 'portfolio_id')
@@ -60,7 +60,7 @@ def clean(portfolio, profile, transcript):
     df = df.sort_values(['person_id','time'])
 
     # map encoded columns to ids
-    df.person_id = column_mapper(df.person_id)
+    # df.person_id = column_mapper(df.person_id)
 
     # Add dummy variables for event column
     df = pd.get_dummies(df, columns=['event'])
@@ -77,6 +77,11 @@ def clean(portfolio, profile, transcript):
     person_offer = person_offer[['person_id', 'portfolio_id', 'event_offer_completed', 'event_offer_received', 'event_offer_viewed']]
 
     df['channels'] = df['channels'].astype('str')
+
+    # map person_id and portfolio_id to int
+    person_offer.person_id = column_mapper(person_offer.person_id)
+    person_offer.portfolio_id = column_mapper(person_offer.portfolio_id)
+
     return df, person_offer
 
 def save_data(df, person_offer):
