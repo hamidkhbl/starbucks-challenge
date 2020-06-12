@@ -1,5 +1,6 @@
 *.json
 \starbucks
+\.metals
 \.ipynb_checkpoints
 *.csv
 test.py
