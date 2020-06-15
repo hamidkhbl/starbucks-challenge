@@ -10,3 +10,7 @@ def index():
 @app.route("/dashboard")
 def dashboard():
     return render_template("public/dashboard.html")
+
+@app.route("/about")
+def about():
+    return render_template("public/about.html")
