@@ -15,7 +15,7 @@ def plot():
     graphs = []
     # load data
 
-    engine = create_engine('sqlite:///../data/starbucks.sqlite')
+    engine = create_engine('sqlite:///data/starbucks.sqlite')
     offer_details = pd.read_sql_table('offer_details', engine)
     person_offer = pd.read_sql_table('person_offer', engine)
 
