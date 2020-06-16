@@ -80,15 +80,18 @@ def clean(portfolio, profile, transcript):
 
     # map person_id and portfolio_id to int
     person_offer.person_id = column_mapper(person_offer.person_id)
-    person_offer.portfolio_id = column_mapper(person_offer.portfolio_id)
+    profile.person_id = column_mapper(profile.person_id)
+    #person_offer.portfolio_id = column_mapper(person_offer.portfolio_id)
 
     return df, person_offer
 
-def save_data(df, person_offer):
+def save_data(df, person_offer,portfolio, profile):
     '''
 
     '''
     engine = create_engine('sqlite:///data/starbucks.sqlite')
+    portfolio[['portfolio_id','offer_type','reward','difficulty','duration']].to_sql('portfolio', engine, index=False)
+    profile.to_sql('profile', engine, index=False)
     person_offer.to_sql('person_offer', engine, index=False)
     df.to_sql('offer_details', engine, index=False)
 
@@ -97,7 +100,7 @@ def main():
 
     portfolio, profile, transcript = load_data()
     df, person_offer = clean(portfolio, profile, transcript)
-    save_data(df, person_offer)
+    save_data(df, person_offer,portfolio,profile)
 
 if __name__ == "__main__":
     main()
