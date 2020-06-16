@@ -9,22 +9,50 @@
 {% block main%}
 
 <div class="container">
-    <form>
-        <h3>Tell me about your user and I will tell you which promotions they like!</h3>
-        <hr>
+  <br>
 
+  <h3>Tell me about your user and I will tell you which type of offer they will like!</h3>
+    <hr>
+
+  <form action="/index" method="POST">
+    <h4>Based on user Id</h4>
+    <p>If you want to send an offer to a user, enter the user's Id here</p>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <input type="Number" class="form-control" id="user_id" name="user_id" placeholder="User Id (between one and 16994)" required>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+<br>
+{%if count > 0 %}
+<p>You have sent these {{count}} type offer to this user before.</p>
+{%endif%}
+  <div class="table col-sm-12 ">
+    <div class="table-responsive col-8" id="col1" onscroll="OnScroll(this,'col2')">
+        {{ df1 | safe}}
+    </div>
+</div>
+{%if count > 0 %}
+<p>{{new_offer}}</p>
+{%endif%}
+
+  <br>
+<hr>
+  <br>
+    <form>
+        <h4>Based on user Characteristics </h4>
+        <p>If you want to send an offer to a group of users, select your target users' characteristics here</p>
         <div class="form-row">
           <div class="form-group col-md-4">
-            <label for="inputEmail4">Age</label>
             <input type="Number" class="form-control" id="inputEmail4" placeholder="Age" required>
           </div>
           <div class="form-group col-md-4">
-            <label for="inputPassword4">Income</label>
             <input type="number" class="form-control" id="inputPassword4" placeholder="Income">
           </div>
 
           <div class="form-group col-md-4">
-            <label for="inputState">Gender</label>
             <select id="inputState" class="form-control">
               <option selected>Choose...</option>
               <option>Male</option>
@@ -41,6 +69,9 @@
 
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
+      <br>
+      <br>
+
 
     </div>
 </div>
