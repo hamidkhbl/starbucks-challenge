@@ -81,6 +81,8 @@ def clean(portfolio, profile, transcript):
     # map person_id and portfolio_id to int
     person_offer.person_id = column_mapper(person_offer.person_id)
     profile.person_id = column_mapper(profile.person_id)
+    profile.dropna(subset=['gender'], how='all', inplace=True)
+    profile['gender'] = profile['gender'].apply(lambda x : 0 if x == 'F' else 1)
     #person_offer.portfolio_id = column_mapper(person_offer.portfolio_id)
 
     return df, person_offer
