@@ -1,5 +1,6 @@
 #%%
 import pandas as pd
+import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -11,6 +12,7 @@ from sklearn.metrics import accuracy_score
 from sqlalchemy import create_engine
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
+import pickle
 
 def load_data():
     '''
@@ -18,7 +20,7 @@ def load_data():
     engine = create_engine('sqlite:///data/starbucks.sqlite')
     person_offer = pd.read_sql_table('person_offer', engine)
     profile = pd.read_sql_table('profile', engine)
-    portfolio = pd.read_sql_table('portfolio', engine)
+    #portfolio = pd.read_sql_table('portfolio', engine)
 
     return person_offer.merge(profile, on= 'person_id')
 
@@ -43,14 +45,15 @@ def predict(X_test, model):
     pred = model.predict(X_test)
     return pred
 
+def save_model(model, file_name):
+    # save the model to disk
+    pickle.dump(model, open(file_name, 'wb'))
+
 def main():
     data = load_data()
     X_train, X_test, y_train, y_test = split_data(data)
     model = train_model(X_train, y_train)
-    pred = predict(X_test, model)
-    print(accuracy_score(y_test, pred))
-    print(X_test.head(1))
-    print(predict(X_test.head(1), model))
+    save_model(model, 'model/model.pkl')
 
 
 if __name__ == "__main__":
