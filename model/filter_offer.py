@@ -10,6 +10,17 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
 from sqlalchemy import create_engine
 
+
+def load_all_data():
+    '''
+    '''
+    engine = create_engine('sqlite:///data/starbucks.sqlite')
+    profile = pd.read_sql_table('profile', engine)
+    portfolio = pd.read_sql_table('portfolio', engine)
+    transcript = pd.read_sql_table('transcript', engine)
+    return profile, portfolio, transcript
+
+
 def load_data():
     '''
     '''

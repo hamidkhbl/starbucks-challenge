@@ -1,0 +1,41 @@
+{% extends "public/templates/public_template.html"%}
+
+{% block title%}Starbucks{% endblock %}
+
+{% block profile%}
+{{username}}
+{% endblock%}
+
+{% block main%}
+
+<div class="container">
+  <br>
+
+  <h3>Here you can see sample of the data.</h3>
+  <p>We have three tables; profile, portfolio and transcript</p>
+    <hr>
+<h4>Profile data sample</h4>
+    <div class="table col-sm-12 ">
+      <div class="table-responsive col-12" id="col1" onscroll="OnScroll(this,'col2')">
+          {{ df_profile | safe}}
+      </div>
+  </div>
+<hr>
+<h4>Portfolio table</h4>
+  <div class="table col-sm-12 ">
+    <div class="table-responsive col-12" id="col1" onscroll="OnScroll(this,'col2')">
+        {{ df_portfolio | safe}}
+    </div>
+</div>
+<hr>
+<h4>Transcript data sample</h4>
+<div class="table col-sm-12 ">
+  <div class="table-responsive col-12" id="col1" onscroll="OnScroll(this,'col2')">
+      {{ df_transcript | safe}}
+  </div>
+</div>
+
+
+</div>
+
+{%endblock%}
