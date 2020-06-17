@@ -87,7 +87,7 @@ def clean(portfolio, profile, transcript):
 
     return df, person_offer
 
-def save_data(df, person_offer,portfolio, profile):
+def save_data(df, person_offer,portfolio, profile, transcript):
     '''
 
     '''
@@ -95,6 +95,7 @@ def save_data(df, person_offer,portfolio, profile):
     portfolio[['portfolio_id','offer_type','reward','difficulty','duration']].to_sql('portfolio', engine, index=False)
     profile.to_sql('profile', engine, index=False)
     person_offer.to_sql('person_offer', engine, index=False)
+    transcript.to_sql('transcript', engine, index=False)
     df.to_sql('offer_details', engine, index=False)
 
 
@@ -102,7 +103,7 @@ def main():
 
     portfolio, profile, transcript = load_data()
     df, person_offer = clean(portfolio, profile, transcript)
-    save_data(df, person_offer,portfolio,profile)
+    save_data(df, person_offer,portfolio,profile, transcript)
 
 if __name__ == "__main__":
     main()
