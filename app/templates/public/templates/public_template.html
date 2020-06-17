@@ -16,7 +16,7 @@
 
   <!-- Custom styles for this template -->
   <link href="{{ url_for('static', filename='css/simple-sidebar.css')}}" rel="stylesheet">
-
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
 <body>
@@ -27,10 +27,9 @@
     <div class="bg-light border-right" id="sidebar-wrapper">
       <div class="sidebar-heading">Starbucks </div>
       <div class="list-group list-group-flush">
-        <a href="/" class="list-group-item list-group-item-action bg-light">Find best promotion</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Plot 1</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Plot 2</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Plot 3</a>
+        <a href="/" class="list-group-item list-group-item-action bg-light">Find best offer for a user</a>
+        <a href="/predict" class="list-group-item list-group-item-action bg-light">Predict offer complition</a>
+        <a href="/plots" class="list-group-item list-group-item-action bg-light">Data Visualizations</a>
         <a href="/about" class="list-group-item list-group-item-action bg-light">About</a>
       </div>
     </div>
