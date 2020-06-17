@@ -9,20 +9,24 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
 from sqlalchemy import create_engine
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
 
 def load_data():
     '''
     '''
     engine = create_engine('sqlite:///data/starbucks.sqlite')
     person_offer = pd.read_sql_table('person_offer', engine)
+    profile = pd.read_sql_table('profile', engine)
+    portfolio = pd.read_sql_table('portfolio', engine)
 
-    return person_offer
+    return person_offer.merge(profile, on= 'person_id')
 
 def split_data(person_offer):
     '''
     '''
-    X = person_offer[['person_id','portfolio_id']]
-    y = person_offer [['event_offer_viewed','event_offer_completed']]
+    X = person_offer[['age','gender', 'income']]
+    y = person_offer ['event_offer_completed']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=42)
     return X_train, X_test, y_train, y_test
 
@@ -44,6 +48,10 @@ def main():
     X_train, X_test, y_train, y_test = split_data(data)
     model = train_model(X_train, y_train)
     pred = predict(X_test, model)
+    print(accuracy_score(y_test, pred))
+    print(X_test.head(1))
+    print(predict(X_test.head(1), model))
+
 
 if __name__ == "__main__":
     main()
